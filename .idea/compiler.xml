@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cache" />
+        <module name="ioc" />
+        <module name="nio" />
+        <module name="springcomponnet" />
+        <module name="springioc" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cache" target="1.5" />
+      <module name="ioc" target="1.8" />
+      <module name="nio" target="1.7" />
+      <module name="spring" target="1.8" />
+      <module name="springcomponent" target="1.8" />
+      <module name="springcomponnet" target="1.7" />
+      <module name="springioc" target="1.7" />
+      <module name="springiocComponent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

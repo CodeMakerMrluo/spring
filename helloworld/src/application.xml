@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        "
+>
+    <!-- <bean id="person" class="com.spring.lzx.beans.Person">
+        <property name="name" value="张三" ></property>
+        <property name="age" value="10"></property>
+    </bean>-->
+    <bean id="person1" class="com.spring.lzx.beans.Person">
+        <property name="name" value="李四"></property>
+        <property name="age" value="20"></property>
+        <property name="car">
+            <!-- 内部bean-->
+            <bean class="com.spring.lzx.beans.Car">
+                <property name="type">
+                    <!--字面值-->
+                    <value>奔弛</value>
+                </property>
+                <property name="factory" value="长安"></property>
+                <property name="price" value="50000"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 空值引用 -->
+    <bean id="person3" class="com.spring.lzx.beans.Person">
+        <property name="name" value="李四"></property>
+        <property name="age" value="20"></property>
+        <property name="car">
+            <null></null>
+        </property>
+    </bean>
+
+    <!--级联属性 -->
+
+    <bean id="car4" class="com.spring.lzx.beans.Car" >
+
+    </bean>
+    <bean id="person4" class="com.spring.lzx.beans.Person">
+        <property name="name" value="周6"></property>
+        <property name="age" value="20"></property>
+        <property name="car" ref="car4">
+        </property>
+        <property name="car.type" value="奔奔"></property>
+    </bean>
+
+    <bean id="person2" class="com.spring.lzx.beans.Person">
+        <property name="name" value="王五"></property>
+        <property name="age" value="20"></property>
+        <property name="car" ref="car"></property>
+    </bean>
+    <!--
+        1.ID的值不允许重复，且具有唯一性
+        2.ID 如果没有指定，会有默认的命名策略 ，当前类的全路径
+        setter注入
+     -->
+    <bean id="dog" class="com.spring.lzx.beans.Dpg">
+        <property name="type" value="哈士奇"></property>
+    </bean>
+    <bean id="dog1" class="com.spring.lzx.beans.Dpg">
+        <property name="type">
+            <value>金毛</value>
+        </property>
+    </bean>
+
+    <!--构造器注入-->
+    <bean id="dog2" class="com.spring.lzx.beans.Dpg">
+        <constructor-arg value="藏獒"></constructor-arg>
+    </bean>
+
+    <bean id="car" class="com.spring.lzx.beans.Car">
+        <!-- 无index按照顺序进行参数构造 -->
+        <constructor-arg value="一汽" index="1"></constructor-arg>
+        <constructor-arg value="宝马" index="0"></constructor-arg>
+        <constructor-arg value="30000000" index="2"></constructor-arg>
+    </bean>
+
+    <bean id="car2" class="com.spring.lzx.beans.Car">
+        <!-- 无index按照顺序进行参数构造 -->
+        <constructor-arg value="马自达" type="java.lang.String" index="1"></constructor-arg>
+        <constructor-arg value="c长安马自达" type="java.lang.String" index="0"></constructor-arg>
+        <constructor-arg value="30000000" type="double"></constructor-arg>
+    </bean>
+
+    <bean id="car3" class="com.spring.lzx.beans.Car">
+        <property name="type">
+            <!--字面值-->
+            <value><![CDATA[<宝马>]]></value>
+        </property>
+        <property name="factory" value="吉利汽车"></property>
+        <property name="price" value="20000"></property>
+    </bean>
+
+
+    <!--集合属性注入-->
+    <bean id="carA" class="com.spring.lzx.beans.Car">
+        <!--<property name="type" value="BWM"></property>
+        <property name="factory" value="华晨宝马"></property>
+        <property name="price" value="3000"></property>-->
+    </bean>
+    <bean id="carB" class="com.spring.lzx.beans.Car">
+        <property name="type" value="BenZ"></property>
+        <property name="factory" value="梅德赛斯"></property>
+        <property name="price" value="3000"></property>
+    </bean>
+
+    <util:list id="carlist">
+        <ref bean="car2"></ref>
+        <ref bean="car3"></ref>
+    </util:list>
+
+    <bean id="person5" class="com.spring.lzx.beans.Person">
+        <property name="name" value="jack"></property>
+        <property name="age" value="12"></property>
+        <!-- 外部list 需要引入xmlns:util="http://www.springframework.org/schema/util" 命名空间-->
+        <property name="cars" ref="carlist">
+            <!--       <list>
+                <ref bean="carA"></ref>
+                <ref bean="carB"></ref>
+            </list>-->
+        </property>
+        <property name="names">
+            <list>
+                <value>AAAAAAAAAAAA</value>
+                <value>BBBBBBBBBBBB</value>
+            </list>
+        </property>
+        <property name="maps">
+            <map>
+                <entry key="first" value-ref="carA"></entry>
+                <entry key="second" value-ref="carB"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 引入外部属性文件: 完成与bean的配置分离
+    1.创建属性:*.properties key=value
+    2.配置文件当中去应用外部文件当中的内容 通过key值来引用
+    3.告知IOC容器引用的属性文件
+    -->
+    <context:property-placeholder location="classpath:bean.properties"></context:property-placeholder>
+    <bean id="person6" class="com.spring.lzx.beans.Person">
+        <property name="name" value="${personName}"></property>
+    </bean>
+
+    <bean id="car5" class="com.spring.lzx.beans.Car">
+        <property name="type" value="BWM"></property>
+    </bean>
+
+    <!-- spring EL  -->
+    <bean id="person7" class="com.spring.lzx.beans.Person">
+        <property name="name" value="tom"></property>
+        <property name="age" value="12"></property>
+        <property name="car" value="#{car5}"></property>
+    </bean>
+
+    <bean id="person8" class="com.spring.lzx.beans.Person">
+        <property name="name" value="#{person7.name.toUpperCase()}"></property>
+        <property name="age" value="#{person7.age + 10}"></property>
+        <property name="car" value="#{person7.car}"></property>
+    </bean>
+
+    <!-- IOC管理bean的生命周期：
+
+        1. 通过构造器或是工厂方法创建对象
+        2. 需要将属性进行注入
+        3. 调入初始化方法
+        4. 正常使用bean
+        5. 调用销毁方法
+        -->
+    <bean id="person9" class="com.spring.lzx.beans.Person" init-method="a" destroy-method="b">
+        <property name="name" value="#{person7.name.toUpperCase()}"></property>
+        <property name="age" value="#{person7.age + 10}"></property>
+        <property name="car" value="#{person7.car}"></property>
+    </bean>
+
+    <!-- 专门处理IOC容器所以bean的初始化方法 -->
+    <bean id="prosser" class="com.spring.lzx.beans.MyBeanPostProcessor">
+
+    </bean>
+
+    <!--静态工厂方法  -->
+    <bean id="dataFormat" class="java.text.DateFormat" factory-method="getDateInstance">
+        <constructor-arg value="3"></constructor-arg>
+    </bean>
+
+    <!--实例工厂方法  -->
+    <bean id="simpleDateFormar" class="java.text.SimpleDateFormat" >
+        <constructor-arg value="yyy-MM-dd hh-mm-ss"></constructor-arg>
+    </bean>
+    <!-- "2001-12-12 12-12-12" -->
+    <bean id="date" factory-bean="simpleDateFormar" factory-method="parse">
+        <constructor-arg value="2001-12-12 12-12-12"></constructor-arg>
+    </bean>
+
+    <!-- factory配置 -->
+    <bean id="car6" class="com.spring.lzx.beans.Car">
+        <property name="type" value="BM"></property>
+    </bean>
+    <bean id="car7" class="com.spring.lzx.beans.CarFactory" >
+
+    </bean>
+
+
+</beans>
